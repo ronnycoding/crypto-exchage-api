@@ -1,0 +1,12 @@
+export const BINANCE_PAIRS = [
+  'BTCUSDT',
+  'ETHUSDT',
+  'ADAUSDT',
+  'SOLUSDT',
+  'SLPUSDT',
+  'CHZUSDT',
+  'CAKEUSDT',
+  'LTCUSDT',
+  'XRPUSDT',
+  'DOTUSDT',
+];

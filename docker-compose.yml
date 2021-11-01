@@ -1,0 +1,69 @@
+version: '3.1'
+
+networks:
+  nestjs:
+    external: false
+
+services:
+  traefik:
+    container_name: ${APP_DOMAIN}-traefik
+    image: traefik
+    command: --web --docker --docker.domain=${APP_DOMAIN}.localhost --logLevel=DEBUG
+    ports:
+      - '82:80'
+      - '8082:8080'
+      - '8028:8025'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev/null:/traefik.toml
+    networks:
+      - nestjs
+
+  app:
+    container_name: ${APP_DOMAIN}-nestjs
+    build: .
+    volumes:
+      - .:/var/www
+      - /var/www/node_modules
+    labels:
+      - 'traefik.backend=app-${APP_DOMAIN}'
+      - 'traefik.frontend.rule=Host:app.${APP_DOMAIN}.localhost'
+      - 'traefik.port=80'
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - nestjs
+
+  postgres:
+    container_name: ${APP_DOMAIN}-postgres
+    image: postgres:10
+    environment:
+      - POSTGRES_PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    restart: always
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    networks:
+      - nestjs
+    labels:
+      - 'traefik.enable=false'
+
+  adminer:
+    container_name: ${APP_DOMAIN}-adminer
+    image: adminer
+    restart: always
+    links:
+      - postgres
+    labels:
+      - 'traefik.backend=adminer-${APP_DOMAIN}'
+      - 'traefik.frontend.rule=Host:adminer.${APP_DOMAIN}.localhost'
+      - 'traefik.port=8080'
+    networks:
+      - nestjs
+
+volumes:
+  db-data:
+    driver: local
