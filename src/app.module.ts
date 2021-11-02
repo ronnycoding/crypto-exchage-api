@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { AppController } from './app.controller';
@@ -31,10 +30,7 @@ import { TasksService } from './task.service';
   providers: [AppService, TasksService],
 })
 export class AppModule {
-  constructor(
-    private connection: Connection,
-    private taskService: TasksService,
-  ) {
+  constructor(private taskService: TasksService) {
     this.taskService.handleCron();
   }
 }
