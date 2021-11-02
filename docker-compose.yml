@@ -5,30 +5,22 @@ networks:
     external: false
 
 services:
-  traefik:
-    container_name: ${APP_DOMAIN}-traefik
-    image: traefik
-    command: --web --docker --docker.domain=${APP_DOMAIN}.localhost --logLevel=DEBUG
-    ports:
-      - '82:80'
-      - '8082:8080'
-      - '8028:8025'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /dev/null:/traefik.toml
-    networks:
-      - nestjs
-
   app:
     container_name: ${APP_DOMAIN}-nestjs
     build: .
+    ports:
+      - 8060:3000
     volumes:
       - .:/var/www
       - /var/www/node_modules
-    labels:
-      - 'traefik.backend=app-${APP_DOMAIN}'
-      - 'traefik.frontend.rule=Host:app.${APP_DOMAIN}.localhost'
-      - 'traefik.port=80'
+    environment:
+      - DEPLOY_ENV=dev
+      - NODE_ENV=dev
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - BINANCE_API_PUBLIC_KEY=${BINANCE_API_PUBLIC_KEY}
+      - BINANCE_API_PRIVATE_KEY=${BINANCE_API_PRIVATE_KEY}
     restart: always
     depends_on:
       - postgres
@@ -54,6 +46,8 @@ services:
   adminer:
     container_name: ${APP_DOMAIN}-adminer
     image: adminer
+    ports:
+      - 8080:8080
     restart: always
     links:
       - postgres

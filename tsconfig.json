@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
+    "noImplicitAny": true,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -12,5 +14,6 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["node_modules", "dist", "__tests__"]
 }
