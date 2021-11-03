@@ -27,12 +27,30 @@
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
+copy env file and add required env variables
+```bash
+$ copy .env.example .env
+```
 
+## Build app image and start docker containers
+```bash
+$ docker-compose up -d
+```
+
+## Access to php adminer
+[http://localhost:8080/](http://localhost:8080/)
+
+## Access to web application
+[http://localhost:8060/](http://localhost:8080/)
+
+## Access to api swagger documentation
+[http://localhost:8060/api](http://localhost:8060/api/)
+
+## Running the app
+install dependencies
 ```bash
 $ npm install
 ```
-
-## Running the app
 
 ```bash
 # development
