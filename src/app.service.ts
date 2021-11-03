@@ -74,7 +74,7 @@ export class AppService {
       .getMany();
 
     const average =
-      results.reduce((acc, curr) => acc + curr.value, 0) / results.length;
+      results?.reduce((acc, curr) => acc + curr?.value, 0) / results.length;
 
     return {
       average,

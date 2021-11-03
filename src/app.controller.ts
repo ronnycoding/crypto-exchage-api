@@ -10,6 +10,7 @@ import {
 import { AppService } from './app.service';
 import { ValidationPipe } from './validation.pipe';
 import { CreatePairDto } from './create-pair.dto';
+import { Pair } from './pair.entity';
 
 @Controller()
 export class AppController {
@@ -26,7 +27,9 @@ export class AppController {
   @Header('Content-Type', 'application/json')
   @HttpCode(200)
   @Get('pairs')
-  getPairs(): Promise<void> {
+  getPairs(): Promise<{
+    results: Pair[];
+  }> {
     return this.appService.getPairs();
   }
 
@@ -36,7 +39,10 @@ export class AppController {
   getAverage(
     @Query('symbol') symbol: string,
     @Query('lectures') lectures = 1,
-  ): Promise<string> {
+  ): Promise<{
+    average: number;
+    numberOfLectures: number;
+  }> {
     return this.appService.getAverage(symbol, lectures);
   }
 }
