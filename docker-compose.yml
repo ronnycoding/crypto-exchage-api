@@ -51,10 +51,6 @@ services:
     restart: always
     links:
       - postgres
-    labels:
-      - 'traefik.backend=adminer-${APP_DOMAIN}'
-      - 'traefik.frontend.rule=Host:adminer.${APP_DOMAIN}.localhost'
-      - 'traefik.port=8080'
     networks:
       - nestjs
 
